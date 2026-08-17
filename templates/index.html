@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Credit Card Fraud Detection</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<header class="header">
+
+    <div class="logo">
+        💳
+    </div>
+
+    <div>
+
+        <h1>
+            Credit Card Fraud Detection
+        </h1>
+
+        <p>
+            Machine Learning Based Detection System
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<!-- ==========================================
+     MAIN
+========================================== -->
+
+<main class="container">
+
+
+<!-- ==========================================
+     SEARCH CARD
+========================================== -->
+
+<section class="search-card">
+
+    <h2>
+        🔍 Check Transaction
+    </h2>
+
+    <p class="description">
+
+        Enter a transaction number to analyze the
+        transaction using our trained machine learning model.
+
+    </p>
+
+
+    <!-- ERROR -->
+
+    {% if error %}
+
+    <div class="error-message">
+
+        ❌ Error: {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- FORM -->
+
+    <form action="{{ url_for('predict') }}"
+          method="POST">
+
+
+        <label for="transaction_number">
+
+            Transaction Number
+
+        </label>
+
+
+        <input
+
+            type="number"
+
+            id="transaction_number"
+
+            name="transaction_number"
+
+            placeholder="Example: 541"
+
+            min="0"
+
+            max="284806"
+
+            required
+
+        >
+
+
+        <button type="submit">
+
+            🔍 Analyze Transaction
+
+        </button>
+
+
+    </form>
+
+</section>
+
+
+
+<!-- ==========================================
+     RESULT
+========================================== -->
+
+{% if show_result %}
+
+<section class="result-card
+    {% if prediction == 1 %}
+        fraud-card
+    {% else %}
+        normal-card
+    {% endif %}
+">
+
+
+    {% if prediction == 1 %}
+
+        <div class="result-icon">
+            🚨
+        </div>
+
+        <h2>
+            FRAUD TRANSACTION DETECTED
+        </h2>
+
+        <p class="result-message">
+
+            This transaction has been identified
+            as potentially fraudulent.
+
+        </p>
+
+    {% else %}
+
+        <div class="result-icon">
+            ✅
+        </div>
+
+        <h2>
+            NORMAL TRANSACTION
+        </h2>
+
+        <p class="result-message">
+
+            This transaction appears to be legitimate.
+
+        </p>
+
+    {% endif %}
+
+
+
+    <!-- TRANSACTION DETAILS -->
+
+    <div class="transaction-details">
+
+
+        <div class="detail-box">
+
+            <span>
+                Transaction Number
+            </span>
+
+            <strong>
+                {{ transaction_number }}
+            </strong>
+
+        </div>
+
+
+
+        <div class="detail-box">
+
+            <span>
+                Transaction Amount
+            </span>
+
+            <strong>
+                ${{ amount }}
+            </strong>
+
+        </div>
+
+
+
+        <div class="detail-box">
+
+            <span>
+                Prediction
+            </span>
+
+            <strong>
+                {{ result }}
+            </strong>
+
+        </div>
+
+
+
+        <div class="detail-box">
+
+            <span>
+                Actual Dataset Result
+            </span>
+
+            <strong>
+                {{ actual }}
+            </strong>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- FRAUD PROBABILITY -->
+
+    <div class="probability-section">
+
+
+        <div class="probability-header">
+
+            <span>
+                Fraud Probability
+            </span>
+
+            <strong>
+                {{ probability }}%
+            </strong>
+
+        </div>
+
+
+        <div class="progress-bar">
+
+            <div
+                class="progress"
+                style="width: {{ probability }}%;">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+{% endif %}
+
+
+
+<!-- ==========================================
+     MODEL PERFORMANCE
+========================================== -->
+
+<section class="performance">
+
+    <h2>
+        📊 Model Performance
+    </h2>
+
+    <p class="description">
+
+        Performance of the trained fraud detection model.
+
+    </p>
+
+
+    <div class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🎯
+            </div>
+
+            <h3>
+                97.55%
+            </h3>
+
+            <p>
+                Accuracy
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🔎
+            </div>
+
+            <h3>
+                6.10%
+            </h3>
+
+            <p>
+                Precision
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📈
+            </div>
+
+            <h3>
+                91.84%
+            </h3>
+
+            <p>
+                Recall
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ⭐
+            </div>
+
+            <h3>
+                11.44%
+            </h3>
+
+            <p>
+                F1 Score
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ==========================================
+     ABOUT
+========================================== -->
+
+<section class="info">
+
+    <h2>
+        🛡️ About the System
+    </h2>
+
+    <p>
+
+        This Credit Card Fraud Detection System uses
+        machine learning to identify potentially fraudulent
+        credit card transactions.
+
+        The model was trained using transaction data
+        containing 30 input features including Time,
+        V1-V28 and Amount.
+
+    </p>
+
+</section>
+
+
+</main>
+
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+    <p>
+        © 2026 Credit Card Fraud Detection System
+    </p>
+
+    <p>
+        B.Tech Machine Learning Project
+    </p>
+
+    <p>
+        Developed by: <a href="https://github.com/arshadmohammad0143-max" target="_blank">MOHAMMAD ARSHAD</a>
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
